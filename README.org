@@ -2,36 +2,5 @@
 :PROPERTIES:
 :CUSTOM_ID: lambda-calculus-polyglot
 :END:
-This repository contains implementations of Lambda Calculus concepts in
-Python and Guile Scheme.
+Lambda Calculus concepts in Python and Guile Scheme.
 
-** Structure
-:PROPERTIES:
-:CUSTOM_ID: structure
-:END:
-- =Python/=: Contains Python implementations
-- =Scheme/=: Contains Guile Scheme implementations
-
-** Running the examples
-:PROPERTIES:
-:CUSTOM_ID: running-the-examples
-:END:
-*** Python
-:PROPERTIES:
-:CUSTOM_ID: python
-:END:
-Run each Python file using:
-
-#+begin_example
-python python/filename.py
-#+end_example
-
-*** Guile Scheme
-:PROPERTIES:
-:CUSTOM_ID: guile-scheme
-:END:
-Run each Scheme file using:
-
-#+begin_example
-guile scheme/filename.scm
-#+end_example
