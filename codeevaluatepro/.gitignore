@@ -1,0 +1,60 @@
+/target
+/classes
+/checkouts
+profiles.clj
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
+/out
+/.repl
+*.log
+/.env
+/.sass-cache
+/node_modules
+/.shadow-cljs/
+/resources/public/js/
+
+# Clojure
+/target
+/classes
+/checkouts
+profiles.clj
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
+/.prepl-port
+.hgignore
+.hg/
+
+# ClojureScript
+/resources/public/js/compiled/
+/resources/public/css/compiled/
+figwheel_server.log
+pom.xml
+*-init.clj
+*.swp
+*.swo
+
+# Environment variables
+.env
+
+# IDE/Editor folders
+/.idea
+/.vscode
+/*.iml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
