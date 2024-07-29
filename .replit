@@ -1,0 +1,19 @@
+modules = [
+  "python-3.12",
+  "clojure-1.11",
+  "go-1.21",
+  "bash",
+  "haskell-ghc9.6",
+  "lua-5.2",
+  "nodejs-20",
+  "ruby-3.2",
+  "rust-stable",
+  "swift-5.8",
+]
+run = "make all"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "make all"]
