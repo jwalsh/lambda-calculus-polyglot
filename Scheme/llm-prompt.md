@@ -1,0 +1,127 @@
+# 10-Step Guide to Implementing Lambda Calculus in Scheme
+
+Follow these steps to build a Lambda Calculus implementation in Scheme, focusing on core concepts and gradually building complexity.
+
+The output should be a single Scheme file with commented notes about what the functions are designed to do and suitable to be run interactively. Don't include any additional commentary. 
+
+## Step 1: Understand Lambda Expressions
+
+Start with the basics of lambda expressions in Scheme:
+1. Define simple lambda expressions (e.g., `(lambda (x) x)`)
+2. Apply lambda expressions to arguments
+3. Understand lexical scoping in lambda expressions
+
+Example:
+```scheme
+(define identity (lambda (x) x))
+(display (identity 5)) ; Should output 5
+```
+
+Test your understanding by creating and applying various simple lambda expressions.
+
+## Step 2: Implement Church Booleans
+
+Define Church encodings for boolean values:
+1. Implement `lc-true` as `(lambda (x y) x)`
+2. Implement `lc-false` as `(lambda (x y) y)`
+3. Create a `lc-if` function to use these booleans
+
+Example:
+```scheme
+(define lc-true (lambda (x y) x))
+(define lc-false (lambda (x y) y))
+(define lc-if (lambda (condition then else) (condition then else)))
+
+(display (lc-if lc-true 'yes 'no)) ; Should output 'yes
+```
+
+## Step 3: Implement Basic Combinators
+
+Now introduce some fundamental combinators:
+1. Identity (I): `(lambda (x) x)`
+2. Kestrel (K): `(lambda (x y) x)`
+3. Kite (KI): `(lambda (x y) y)`
+
+Note how these relate to the Church booleans from Step 2.
+
+## Step 4: Create Church Numerals
+
+Implement Church numerals:
+1. Define `lc-zero` as `(lambda (f x) x)`
+2. Implement `lc-succ` (successor function)
+3. Create helper functions to convert between Church numerals and regular integers
+
+Example:
+```scheme
+(define lc-zero (lambda (f x) x))
+(define lc-succ (lambda (n) (lambda (f x) (f (n f x)))))
+
+(define (church-to-int n)
+  (n (lambda (x) (+ x 1)) 0))
+
+(display (church-to-int (lc-succ lc-zero))) ; Should output 1
+```
+
+## Step 5: Implement Basic Arithmetic
+
+Using Church numerals, implement:
+1. Addition
+2. Multiplication
+
+Example:
+```scheme
+(define lc-add (lambda (m n) (lambda (f x) (m f (n f x)))))
+(define lc-mult (lambda (m n) (lambda (f) (m (n f)))))
+
+(define lc-one (lc-succ lc-zero))
+(define lc-two (lc-succ lc-one))
+
+(display (church-to-int (lc-add lc-one lc-two))) ; Should output 3
+```
+
+## Step 6: Implement Pairs
+
+Introduce the concept of pairs:
+1. Create the `lc-pair` constructor
+2. Implement `lc-first` to get the first element of a pair
+3. Implement `lc-second` to get the second element of a pair
+
+Example:
+```scheme
+(define lc-pair (lambda (x y) (lambda (f) (f x y))))
+(define lc-first (lambda (p) (p (lambda (x y) x))))
+(define lc-second (lambda (p) (p (lambda (x y) y))))
+
+(define my-pair (lc-pair 'hello 'world))
+(display (lc-first my-pair)) ; Should output 'hello
+```
+
+## Step 7: Build Lists Using Pairs
+
+Use pairs to implement basic list operations:
+1. Define `lc-nil` (empty list)
+2. Implement `lc-cons` to construct lists
+3. Create `lc-is-nil?` to check for empty lists
+4. Implement `lc-head` and `lc-tail` for lists
+
+## Step 8: Implement Comparison Operations
+
+Create comparison operations for Church numerals:
+1. Is-Zero
+2. Less-Than
+3. Equality
+
+## Step 9: Implement Higher-Order List Operations
+
+Add higher-order functions for lists:
+1. `lc-map`: Apply a function to each element of a list
+2. `lc-filter`: Create a new list with elements that satisfy a predicate
+3. `lc-fold`: Fold a list with an accumulator
+
+## Step 10: Explore Recursion and Fixed-Point Combinators
+
+Introduce the concept of recursion in lambda calculus:
+1. Explain the challenge of recursion in pure lambda calculus
+2. Implement the Y combinator
+3. Use the Y combinator to create recursive functions (e.g., factorial)
+
