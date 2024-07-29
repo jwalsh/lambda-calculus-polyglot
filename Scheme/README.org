@@ -1,0 +1,250 @@
+* lambda-calculus-scheme
+:PROPERTIES:
+:CUSTOM_ID: lambda-calculus-scheme
+:END:
+This repository explores the Lambda Calculus, a formal system for
+expressing computation based on function abstraction and application. We
+implement core lambda calculus concepts in Scheme, a dialect of Lisp
+known for its elegance and expressiveness.
+
+** Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+- *Church Encoding:* Representation of numbers, booleans, lists,
+  dictionaries, trees, and graphs using lambda functions.
+- *Conversions:* Functions to convert lambda calculus representations to
+  and from Scheme's primitive data types.
+- *List Operations:* =map=, =filter=, and =reduce= (fold) functions for
+  manipulating lists.
+- *Combinators:* Essential combinators (I, K, KI, S, B, C) for building
+  more complex computations.
+- *Examples:* Illustrative code snippets showcasing the usage of lambda
+  calculus in Scheme.
+
+** Constraints 
+
+
+- Only use primitives of ~define~, ~lambda~, and ~error~.
+- ~lambda~ can accept multi-arity arguments.
+- Additional rules can be inferred from the parser.
+
+** How to Run (Using Emacs and Geiser)
+:PROPERTIES:
+:CUSTOM_ID: how-to-run-using-emacs-and-geiser
+:END:
+1. *Install Geiser:* Make sure you have Geiser installed for Emacs.
+   - You can install it using the Emacs package manager or your system's
+     package manager.
+2. *Open Emacs and Load the Files:*
+   - Open =lc.scm= and =lambda-calculus-examples.scm= in Emacs.
+   - Use =M-x geiser-load-file= to load =lc.scm=.
+   - Switch to the =lambda-calculus-examples.scm= buffer and use
+     =M-x geiser-eval-buffer= to run the examples.
+3. *Optional*
+   - rainbow-block 
+   - prettify-symbols-mode
+
+** How to Run (Using Racket)
+:PROPERTIES:
+:CUSTOM_ID: how-to-run-using-racket
+:END:
+1. *Install Racket:* If you don't have it already, download and install
+   Racket from the official website.
+
+2. *Load and Run:*
+
+   - Open a Racket REPL.
+   - Use =(require "lc.scm")= to load the functions.
+   - Then, use =(require "lambda-calculus-examples.scm")= to run the examples.
+
+* Lambda Calculus Essentials
+
+This repository provides a comprehensive collection of Lambda Calculus definitions and operations, including numerals, arithmetic, booleans, logic, pairs, lists, trees, graphs, dictionaries, and various combinators. The code is written in Scheme and showcases the power and elegance of Lambda Calculus in implementing fundamental computational concepts.
+
+** Table of Contents
+- Church Numerals and Arithmetic: Implementation of natural numbers and basic arithmetic operations.
+- Booleans and Logic: Definitions of boolean values and logical operations.
+- Pairs, First, and Rest: Functions to work with pairs (2-tuples).
+- Lists and Vectors: Operations for list manipulation including append, map, filter, and reduce.
+- Trees: Representation and manipulation of binary trees.
+- Graphs: Basic graph structure using adjacency lists and operations to manipulate graphs.
+- Dictionaries: Lambda calculus-based dictionaries for key-value storage and manipulation.
+- Python-Inspired Conversion Functions: Utilities for type checking and conversion to more familiar representations.
+
+- Identity and Combinators
+
+**Church Numerals and Arithmetic**
+
+The Church numerals are a representation of natural numbers using Lambda Calculus. Here are some key definitions:
+
+#+begin_src scheme
+(define lc-zero (lambda (f x) x))
+(define lc-inc (lambda (n) (lambda (f x) (f ((n f) x)))))
+(define lc-add (lambda (m n) (lambda (f x) ((m f) ((n f) x)))))
+(define lc-sub (lambda (m n) ((n lc-dec) m)))
+(define lc-dec (lambda (n)
+  (lambda (f x) (((n (lambda (g h) (h (g f))))
+                 (lambda (u) x))
+                 lc-identity))))
+(define lc-is-zero? (lambda (n) (n (lambda (x) lc-false) lc-true)))
+(define lc-mult (lambda (m n) (lambda (f) (m (n f)))))
+(define lc-exp (lambda (m n) (n m)))
+#+end_src
+
+**Booleans and Logic**
+
+Lambda Calculus can also represent boolean values and logical operations:
+
+#+begin_src scheme
+
+(define lc-true  (lambda (x y) x))
+(define lc-false (lambda (x y) y))
+(define lc-if (lambda (condition then-expr else-expr) (condition then-expr else-expr)))
+(define lc-and (lambda (x y) (x (y lc-true lc-false) lc-false)))
+(define lc-or (lambda (x y) (x lc-true (y lc-true lc-false))))
+(define lc-not (lambda (x) (x lc-false lc-true)))
+(define lc-identity (lambda (x) x))
+#+end_src
+
+**Pairs, First, and Rest**
+
+Pairs can be constructed and manipulated using Lambda Calculus:
+
+#+begin_src scheme
+(define lc-pair (lambda (x y) (lambda (z) (z x y))))
+(define lc-first (lambda (p) (p lc-true)))
+(define lc-second (lambda (p) (p lc-false)))
+#+end_src
+
+**Lists and Vectors**
+
+Lists are fundamental data structures that can be represented and manipulated in Lambda Calculus:
+
+#+begin_src scheme
+(define lc-nil (lambda (x) lc-true))
+(define lc-cons (lambda (h t) (lambda (z) (z h t))))
+(define lc-empty-list lc-nil)
+(define lc-list-append lc-cons)
+(define lc-list-length 
+  (lambda (l)
+    (lc-if (lc-is-nil? l)
+           lc-zero
+           (lc-inc (lc-list-length (lc-second l))))))
+(define lc-is-nil?
+  (lambda (l)
+    (l (lambda (h t) lc-false) lc-true)))
+(define lc-map 
+  (lambda (f l)
+    (lc-if (lc-is-nil? l)
+           lc-nil
+           (lc-cons (f (lc-first l)) (lc-map f (lc-second l))))))
+(define lc-filter
+  (lambda (pred l)
+    (lc-if (lc-is-nil? l)
+           lc-nil
+           (lc-if (pred (lc-first l))
+                  (lc-cons (lc-first l) (lc-filter pred (lc-second l)))
+                  (lc-filter pred (lc-second l))))))
+(define lc-reduce 
+  (lambda (f acc l)
+    (lc-if (lc-is-nil? l)
+           acc
+           (lc-reduce f (f acc (lc-first l)) (lc-second l)))))
+#+end_src
+
+**Trees**
+
+Trees can be represented using nested lists:
+
+#+begin_src scheme
+(define lc-empty-tree lc-nil)
+(define lc-make-tree (lambda (value left right) (lc-list value left right)))
+(define lc-tree-value (lambda (t) (lc-first t)))
+(define lc-tree-left  (lambda (t) (lc-second t)))
+(define lc-tree-right (lambda (t) (lc-second (lc-second t))))
+(define lc-is-empty-tree? lc-is-nil?)
+#+end_src
+
+**Graphs (Adjacency Lists Representation)**
+
+Graphs can be represented using adjacency lists:
+
+#+begin_src scheme
+(define lc-empty-graph lc-nil)
+(define lc-add-vertex (lambda (g vertex) (lc-cons (lc-pair vertex lc-nil) g)))
+(define lc-add-edge (lambda (g v1 v2)
+  (lc-if (lc-is-nil? g)
+         lc-empty-graph
+         (lc-cons 
+           (lc-if (lc-equal? v1 (lc-first (lc-first g)))
+                  (lc-pair (lc-first (lc-first g)) (lc-cons v2 (lc-second (lc-first g))))
+                  (lc-first g))
+           (lc-add-edge (lc-second g) v1 v2)))))
+#+end_src
+
+**Dictionaries**
+
+Dictionaries (or associative arrays) can be implemented using Lambda Calculus:
+
+#+begin_src scheme
+(define lc-empty-dict (lambda (k) lc-false))
+(define lc-dict-insert (lambda (d k v) (lambda (k') (lc-if (lc-equal? k k') v (d k')))))
+(define lc-dict-lookup (lambda (d k) (d k)))
+(define lc-dict-update (lambda (d k v) (lc-dict-insert d k v)))
+(define lc-dict-remove (lambda (d k) (lambda (k') (lc-if (lc-equal? k k') lc-false (d k')))))
+(define lc-equal? 
+  (lambda (m n)
+    (lc-and (lc-is-zero? (lc-sub m n)) (lc-is-zero? (lc-sub n m)))))
+#+end_src
+
+**Python-Inspired Conversion Functions**
+
+Conversion functions to translate Lambda Calculus representations to more familiar forms:
+
+#+begin_src scheme
+(define (lc-to-str x)
+    (cond ((lc-number? x) (number->string (lc-to-int x)))
+          ((lc-boolean? x) (if (lc-to-bool x) "True" "False"))
+          ((lc-pair? x) (string-append "(" (lc-to-str (lc-first x)) ", " (lc-to-str (lc-second x)) ")"))
+          ((lc-nil? x) "[]")
+          (else "UnknownType")))
+
+(define (lc-number? x)
+  (and (procedure? x)
+       (procedure? (x lc-inc))
+       (procedure? (x lc-inc lc-zero))))
+
+(define (lc-boolean? x)
+  (or (eq? x lc-true) (eq? x lc-false)))
+
+(define (lc-pair? x)
+  (and (procedure? x)
+       (procedure? (x lc-true))
+       (procedure? (x lc-false))))
+
+(define lc-to-bool (lambda (b) (b #t #f)))
+(define lc-to-int (lambda (n) (n (lambda (x) (+ x 1)) 0)))
+(define lc-to-list (lambda (l) (lc-to-list-helper l '())))
+
+(define lc-to-list-helper
+  (lambda (l acc)
+    (lc-if (lc-is-nil? l)
+           acc
+           (lc-to-list-helper (lc-second l) (cons (lc-to-int (lc-first l)) acc)))))
+#+end_src
+
+**Identity and Combinators**
+
+Classic combinators in Lambda Calculus:
+
+#+begin_src scheme
+(define lc-i (lambda (x) x))
+(define lc-k (lambda (x y) x))
+(define lc-ki (lambda (x y) y))
+(define lc-s (lambda (x y z) (x z (y z))))
+(define lc-b (lambda (x y z) (x (y z))))
+(define lc-c (lambda (x y z) (x z y)))
+#+end_src
+
+This repository serves as a valuable resource for anyone interested in the foundational concepts of computation as expressed through Lambda Calculus. Whether you're a student, educator, or enthusiast, you'll find a wealth of examples and definitions to explore and learn from.
