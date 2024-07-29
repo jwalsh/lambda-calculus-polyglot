@@ -3,3 +3,7 @@
 :CUSTOM_ID: lambda-calculus-polyglot
 :END:
 Lambda Calculus concepts in Python and Guile Scheme.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7606d7fcee97500c979917e649399b3dcbf9c457
