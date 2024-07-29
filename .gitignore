@@ -1,1 +1,4 @@
 .plandex
+
+.env
+*.log
