@@ -7,7 +7,7 @@ import os
 # WIP: Rules for the linting of a Scheme file
 RULES = {'only-allowed', 'single-arity', 'no-comments'}
 
-ALLOWED_PRIMITIVES = {'define', 'lambda', 'error'}
+ALLOWED_PRIMITIVES = {'define', 'lambda', 'quote', 'error'}
 
 SCHEME_PRIMITIVES = {
     # 11.2 Definitions
