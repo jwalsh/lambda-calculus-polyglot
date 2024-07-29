@@ -1,4 +1,4 @@
-LANGUAGE=core.logic
+LANGUAGE=Scheme (MIT)
 
 # 10-Step Guide to Implementing Lambda Calculus in {LANGUAGE}
 
