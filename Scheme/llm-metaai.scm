@@ -1,3 +1,6 @@
+; Meta AI Lambda Calculus Implementation in Scheme
+; Model: Meta AI, Date: 2024-07-29
+
 ; Step 1: Understand Lambda Expressions
 (define identity (lambda (x) x))
 (display (identity 5)) ; Should output 5
@@ -35,7 +38,7 @@
 (display (lc-first my-pair)) ; Should output 'hello
 
 ; Step 7: Build Lists Using Pairs
-(define lc-nil (lambda (f) #f))
+(define lc-nil (lambda (f) (f)))
 (define lc-cons (lambda (x y) (lambda (f) (f x y))))
 (define lc-is-nil? (lambda (l) (l (lambda (x y) #f))))
 (define lc-head (lambda (l) (l (lambda (x y) x))))
@@ -43,14 +46,14 @@
 
 ; Step 8: Implement Comparison Operations
 (define lc-is-zero? (lambda (n) (n (lambda (x) #f) #t)))
-(define lc-less-than (lambda (m n) (n (lambda (x) (lc-is-zero? m)) #f)))
+(define lc-less-than (lambda (m n) (n (lambda (f) (m (lambda (x) #f) #t)) #f)))
 (define lc-equal (lambda (m n) (lc-and (lc-less-than m n) (lc-less-than n m))))
 
 ; Step 9: Implement Higher-Order List Operations
-(define lc-map (lambda (f l) (lc-if (lc-is-nil? l) lc-nil (lc-cons (f (lc-head l)) (lc-map f (lc-tail l))))))
-(define lc-filter (lambda (p l) (lc-if (lc-is-nil? l) lc-nil (lc-if (p (lc-head l)) (lc-cons (lc-head l) (lc-filter p (lc-tail l))) (lc-filter p (lc-tail l))))))
-(define lc-fold (lambda (f acc l) (lc-if (lc-is-nil? l) acc (f (lc-head l) (lc-fold f acc (lc-tail l))))))
+(define lc-map (lambda (f l) (l (lambda (x y) (lc-cons (f x) y)))))
+(define lc-filter (lambda (p l) (l (lambda (x y) (if (p x) (lc-cons x y) y)))))
+(define lc-fold (lambda (f acc l) (l (lambda (x y) (f x y)) acc)))
 
 ; Step 10: Explore Recursion and Fixed-Point Combinators
-(define Y (lambda (f) ((lambda (x) (x x)) (lambda (x) (f (lambda (y) ((x x) y)))))))
-(define factorial (Y (lambda (fact) (lambda (n) (lc-if (lc-is-zero? n) lc-one (lc-mult n (fact (lc-succ n))))))))
+(define Y (lambda (f) ((lambda (x) (f (x x))) (lambda (x) (f (x x))))))
+(define lc-factorial (Y (lambda (f) (lambda (n) (if (lc-is-zero? n) lc-one (lc-mult n (f (lc-succ n))))))))

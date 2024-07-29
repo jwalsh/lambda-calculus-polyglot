@@ -1,12 +1,18 @@
-# 10-Step Guide to Implementing Lambda Calculus in Scheme
+LANGUAGE=core.logic
 
-Follow these steps to build a Lambda Calculus implementation in Scheme, focusing on core concepts and gradually building complexity.
+# 10-Step Guide to Implementing Lambda Calculus in {LANGUAGE}
 
-The output should be a single Scheme file with commented notes about what the functions are designed to do and suitable to be run interactively. Don't include any additional commentary. 
+Follow these steps to build a Lambda Calculus implementation in {LANGUAGE}, focusing on core concepts and gradually building complexity.
+
+The output should be a single {LANGUAGE} file with commented notes about what the functions are designed to do and suitable to be run interactively. Don't include any additional commentary. 
+
+The nomenclature should be appropriate to {LANGUAGE} rather than using the examples noted below. 
+
+The header of the {LANGUAGE} file should include your model information that would be suitable for citation. It should also include a recommended filename and usage instructions. 
 
 ## Step 1: Understand Lambda Expressions
 
-Start with the basics of lambda expressions in Scheme:
+Start with the basics of lambda expressions in {LANGUAGE}:
 1. Define simple lambda expressions (e.g., `(lambda (x) x)`)
 2. Apply lambda expressions to arguments
 3. Understand lexical scoping in lambda expressions

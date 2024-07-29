@@ -1,14 +1,12 @@
-Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
+;; Lambda Calculus Implementation in Scheme
+;; Created by AI Assistant (Perplexity AI)
+;; Model: Claude 3 (Anthropic)
+;; Date: July 29, 2024
 
-```scheme
 ;; Step 1: Understand Lambda Expressions
 
-; Simple identity function
 (define identity (lambda (x) x))
-
-; Test identity function
-(display (identity 5)) ; Should output 5
-(newline)
+;; Test: (display (identity 5))
 
 ;; Step 2: Implement Church Booleans
 
@@ -16,9 +14,7 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
 (define lc-false (lambda (x y) y))
 (define lc-if (lambda (condition then else) (condition then else)))
 
-; Test Church booleans
-(display (lc-if lc-true 'yes 'no)) ; Should output yes
-(newline)
+;; Test: (display (lc-if lc-true 'yes 'no))
 
 ;; Step 3: Implement Basic Combinators
 
@@ -39,9 +35,7 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
       lc-zero
       (lc-succ (int-to-church (- n 1)))))
 
-; Test Church numerals
-(display (church-to-int (lc-succ lc-zero))) ; Should output 1
-(newline)
+;; Test: (display (church-to-int (lc-succ lc-zero)))
 
 ;; Step 5: Implement Basic Arithmetic
 
@@ -51,9 +45,7 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
 (define lc-one (lc-succ lc-zero))
 (define lc-two (lc-succ lc-one))
 
-; Test arithmetic
-(display (church-to-int (lc-add lc-one lc-two))) ; Should output 3
-(newline)
+;; Test: (display (church-to-int (lc-add lc-one lc-two)))
 
 ;; Step 6: Implement Pairs
 
@@ -61,10 +53,9 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
 (define lc-first (lambda (p) (p (lambda (x y) x))))
 (define lc-second (lambda (p) (p (lambda (x y) y))))
 
-; Test pairs
-(define my-pair (lc-pair 'hello 'world))
-(display (lc-first my-pair)) ; Should output hello
-(newline)
+;; Test: 
+;; (define my-pair (lc-pair 'hello 'world))
+;; (display (lc-first my-pair))
 
 ;; Step 7: Build Lists Using Pairs
 
@@ -73,11 +64,6 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
 (define lc-is-nil? (lambda (l) (l (lambda (x) lc-true))))
 (define lc-head (lambda (l) (lc-first (lc-second l))))
 (define lc-tail (lambda (l) (lc-second (lc-second l))))
-
-; Test lists
-(define my-list (lc-cons 1 (lc-cons 2 (lc-cons 3 lc-nil))))
-(display (lc-head my-list)) ; Should output 1
-(newline)
 
 ;; Step 8: Implement Comparison Operations
 
@@ -91,49 +77,52 @@ Here's a Scheme file implementing the 10-step guide for Lambda Calculus:
 
 (define lc-pred 
   (lambda (n)
-    (lambda (f)
-      (lambda (x)
-        ((n (lambda (g) (lambda (h) (h (g f)))))
-         (lambda (u) x)
-         (lambda (u) u))))))
+    (lc-first
+      (n (lambda (p) 
+           (lc-pair (lc-second p) (lc-succ (lc-second p))))
+         (lc-pair lc-zero lc-zero)))))
+
+(define lc-and 
+  (lambda (p q) 
+    (lc-if p q lc-false)))
 
 ;; Step 9: Implement Higher-Order List Operations
 
 (define lc-map
   (lambda (f l)
-    ((l (lambda (h t) (lc-cons (f h) (lc-map f t))))
-     lc-nil)))
+    (lc-if (lc-is-nil? l)
+           lc-nil
+           (lc-cons (f (lc-head l))
+                    (lc-map f (lc-tail l))))))
 
 (define lc-filter
   (lambda (pred l)
-    ((l (lambda (h t) 
-          ((pred h) 
-           (lc-cons h (lc-filter pred t))
-           (lc-filter pred t))))
-     lc-nil)))
+    (lc-if (lc-is-nil? l)
+           lc-nil
+           (lc-if (pred (lc-head l))
+                  (lc-cons (lc-head l) (lc-filter pred (lc-tail l)))
+                  (lc-filter pred (lc-tail l))))))
 
 (define lc-fold
   (lambda (f acc l)
-    ((l (lambda (h t) (lc-fold f (f acc h) t)))
-     acc)))
+    (lc-if (lc-is-nil? l)
+           acc
+           (lc-fold f (f acc (lc-head l)) (lc-tail l)))))
 
 ;; Step 10: Explore Recursion and Fixed-Point Combinators
 
-; Y combinator
 (define Y
   (lambda (f)
     ((lambda (x) (f (lambda (y) ((x x) y))))
      (lambda (x) (f (lambda (y) ((x x) y)))))))
 
-; Factorial using Y combinator
-(define factorial
+;; Example: Factorial using Y combinator
+(define lc-factorial
   (Y (lambda (f)
        (lambda (n)
-         (if (zero? n)
-             1
-             (* n (f (- n 1))))))))
+         (lc-if (lc-is-zero? n)
+                lc-one
+                (lc-mult n (f (lc-pred n))))))))
 
-; Test factorial
-(display (factorial 5)) ; Should output 120
-(newline)
-```
+;; Test: (display (church-to-int (lc-factorial (int-to-church 5))))
+
