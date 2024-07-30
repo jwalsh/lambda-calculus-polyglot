@@ -20,7 +20,7 @@ all: deps compile test
 clean:
 	@echo "$(CYAN)Cleaning project...$(NC)"
 	$(LEIN) clean
-	rm -rf target resources/public/js/compiled resources/public/cljs-out
+	rm -rf target resources/public/js/compiled
 
 ## Install project dependencies
 deps:
@@ -28,20 +28,20 @@ deps:
 	$(LEIN) deps
 	$(NPM) install
 
-## Compile ClojureScript
+## Compile ClojureScript for production
 compile:
-	@echo "$(CYAN)Compiling ClojureScript...$(NC)"
-	$(LEIN) fig:min
+	@echo "$(CYAN)Compiling ClojureScript for production...$(NC)"
+	$(LEIN) cljsbuild once min
 
 ## Run tests
 test:
 	@echo "$(CYAN)Running tests...$(NC)"
-	$(LEIN) fig:test
+	$(LEIN) test
 
 ## Start development server
 run:
 	@echo "$(CYAN)Starting development server...$(NC)"
-	$(LEIN) fig:build
+	$(LEIN) figwheel
 
 ## Build production JAR
 build:
