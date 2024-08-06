@@ -1,3 +1,6 @@
+#+TITLE: lambda-calculus-polyglot
+#+LAST_MODIFIED: 2024-08-06 06:50:54
+
 * Lambda Calculus Polyglot
 :PROPERTIES:
 :CUSTOM_ID: lambda-calculus-polyglot
